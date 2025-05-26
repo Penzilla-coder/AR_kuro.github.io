@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kuro WebAR</title>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/mindar-image-three.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.136.0/build/three.min.js"></script>
+    <style>
+      html, body { margin: 0; overflow: hidden; height: 100%; }
+      #ar-container { width: 100vw; height: 100vh; position: relative; }
+      #overlay-text {
+        position: absolute;
+        top: 10%;
+        width: 100%;
+        text-align: center;
+        font-size: 24px;
+        color: white;
+        text-shadow: 0 0 5px #000;
+        font-family: sans-serif;
+        animation: fadeIn 3s ease-in-out forwards;
+      }
+      @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="ar-container">
+      <div id="overlay-text">Hi! I’m Kuro the CubeCat 🖤<br>สวัสดี! เราชื่อคุโระนะ</div>
+    </div>
+
+    <script type="module">
+      import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.136.0/build/three.module.js';
+      import { MindARThree } from 'https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/mindar-image-three.prod.js';
+
+      const mindarThree = new MindARThree({
+        container: document.querySelector("#ar-container"),
+        imageTargetSrc: "./targets.mind"
+      });
+      const { renderer, scene, camera } = mindarThree;
+
+      const anchor = mindarThree.addAnchor(0);
+      const cube = new THREE.Mesh(
+        new THREE.BoxGeometry(0.4, 0.4, 0.4),
+        new THREE.MeshStandardMaterial({ color: 0x000000 })
+      );
+      anchor.group.add(cube);
+
+      const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+      scene.add(light);
+
+      await mindarThree.start();
+      renderer.setAnimationLoop(() => {
+        renderer.render(scene, camera);
+        cube.rotation.y += 0.01;
+      });
+    </script>
+  </body>
+</html>
