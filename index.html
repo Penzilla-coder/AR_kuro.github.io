@@ -15,6 +15,7 @@
       <a-assets>
         <!-- เพิ่มโมเดลหรือทรัพยากรที่ต้องการ -->
          <a-asset-item id="model" src="SmallHouse.glb"></a-asset-item>
+         <a-asset-item id="hotdog" src="Hotdog_test.glb"></a-asset-item>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -34,6 +35,12 @@
             scale="0.3 0.3 0.3" 
             rotation="0 0 0" 
             animation="property: rotation; to: 0 360 0; loop: true; dur: 5000" 
+            animation-mixer>
+        </a-entity>
+        <a-entity gltf-model="#hotdog" 
+            position="0 -0.3 0" 
+            scale="0.5 0.5 0.5" 
+            rotation="0 0 0" 
             animation-mixer>
         </a-entity>
       </a-entity>
