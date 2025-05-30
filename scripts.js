@@ -1,6 +1,35 @@
-const house = document.querySelector('#houseModel');
-  house.addEventListener('animationcomplete', (e) => {
-    if (e.detail.name === 'animation') {  // ตรวจว่า animation scale เสร็จ
-      house.emit('rotateStart');          // สั่งให้เริ่มหมุน
+const scene = document.querySelector("a-scene");
+const house = document.querySelector("#houseModel");
+
+scene.addEventListener("mindar-image-targetFound", (e) => {
+    if (e.detail.index === 0) {
+        house.setAttribute("visible", "true");
+        house.setAttribute("scale", "0 0 0");
+
+        // สั่ง animation ขยาย scale
+        house.setAttribute(
+            "animation__scaleup",
+            "property: scale; to: 0.5 0.5 0.5; dur: 1000; easing: easeOutElastic"
+        );
     }
-  });
+});
+
+scene.addEventListener("mindar-image-targetLost", (e) => {
+    if (e.detail.index === 0) {
+        // ซ่อนโมเดล
+        house.setAttribute("visible", "false");
+        house.removeAttribute("animation__scaleup");
+        house.setAttribute("scale", "0 0 0");
+        house.removeAttribute("animation__rotate");
+    }
+});
+
+// เมื่อ animation ขยายเสร็จ ให้เริ่มหมุนวน
+house.addEventListener("animationcomplete", (e) => {
+    if (e.detail.name === "animation__scaleup") {
+        house.setAttribute(
+            "animation__rotate",
+            "property: rotation; to: 0 360 0; loop: true; dur: 4000; easing: linear"
+        );
+    }
+});
