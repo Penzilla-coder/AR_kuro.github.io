@@ -13,7 +13,7 @@
     </style>
   </head>
   <body>
-    <a-scene mindar-image="imageTargetSrc: hall.mind" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true" embedded>
+    <a-scene world-map-controller mindar-image="imageTargetSrc: hall.mind" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true" embedded>
 
       <a-assets>
         <video id="hallVideo" src="cube.mp4" loop="true" autoplay="false" muted playsinline></video>
@@ -24,19 +24,27 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <!-- Anchor -->
-      <a-entity id="anchor" mindar-image-target="targetIndex: 0"></a-entity>
+      <a-entity id="anchor" mindar-image-target="targetIndex: 0">
+        <a-entity id="world-content" visible="false">
+        <!-- Center animation (between red and blue Halls) -->
+          <a-entity gltf-model="#halls-red"
+            position="0 0.5 0"
+            scale="0.3 0.3 0.3"
+            rotation="0 180 0"
+            animation-mixer>
+          </a-entity>
+          <a-box id="center-effect" position="0 0 0" color="red" animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
+
+          <!-- Left video area -->
+          <a-video id="video-area" position="-1 0 0" width="1.2" height="0.7" src="#hallVideo" visible="false"></a-video>
+
+          <!-- Top drop effect -->
+          <a-entity gltf-model="#pipe-drop" id="pipe-effect" position="0 1 0" scale="0.3 0.3 0.3" animation="property: position; to: 0 -0.5 0; loop: true; dur: 3000" visible="false"></a-entity>
+        </a-entity>
+      </a-entity>
 
       <!-- Content group anchored to world (will be positioned relatively from anchor) -->
-      <a-entity id="world-content" visible="false">
-        <!-- Center animation (between red and blue Halls) -->
-        <a-box id="center-effect" position="0 0 0" color="red" animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
-
-        <!-- Left video area -->
-        <a-video id="video-area" position="-1 0 0" width="1.2" height="0.7" src="#hallVideo" visible="false"></a-video>
-
-        <!-- Top drop effect -->
-        <a-entity gltf-model="#pipe-drop" id="pipe-effect" position="0 1 0" scale="0.3 0.3 0.3" animation="property: position; to: 0 -0.5 0; loop: true; dur: 3000" visible="false"></a-entity>
-      </a-entity>
+      
 
       <script>
         AFRAME.registerComponent('world-map-controller', {
@@ -57,7 +65,7 @@
               anchorObj.getWorldPosition(worldPos);
 
               // Set position for world content relative to anchor
-              worldContent.object3D.position.copy(worldPos);
+              // worldContent.object3D.position.copy(worldPos);
               worldContent.setAttribute('visible', true);
 
               // Show video and effects
