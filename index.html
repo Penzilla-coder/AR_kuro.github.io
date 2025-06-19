@@ -34,7 +34,9 @@
             animation="property: rotation; to: 0 360 0; loop: true; dur: 5000" 
             animation-mixer>
         </a-entity>
-        <a-entity gltf-model="#heart" 
+        <a-entity
+            id="heartModel"
+            gltf-model="#heart" 
             position="0 -0.3 0" 
             scale="5 5 5" 
             rotation="0 0 0" 
@@ -48,5 +50,28 @@
         </a-entity>
       </a-entity>
     </a-scene>
+    <script>
+      const heartEl = document.querySelector('#heartModel');
+
+      heartEl.addEventListener('model-loaded', () => {
+        const mesh = heartEl.getObject3D('mesh');
+        if (!mesh || !mesh.animations || mesh.animations.length === 0) return;
+
+        const mixer = new THREE.AnimationMixer(mesh);
+
+        mesh.animations.forEach((clip) => {
+          const action = mixer.clipAction(clip);
+          action.loop = THREE.LoopOnce;
+          action.clampWhenFinished = true;
+          action.play();
+        });
+
+        // อัปเดต mixer ในทุกเฟรม
+        heartEl.sceneEl.addEventListener('tick', (e) => {
+          const delta = e.detail.delta / 1000;
+          mixer.update(delta);
+        });
+      });
+</script>
   </body>
 </html>
