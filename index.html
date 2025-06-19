@@ -51,27 +51,6 @@
       </a-entity>
     </a-scene>
     <script>
-      const heartEl = document.querySelector('#heartModel');
-
-      heartEl.addEventListener('model-loaded', () => {
-        const mesh = heartEl.getObject3D('mesh');
-        if (!mesh || !mesh.animations || mesh.animations.length === 0) return;
-
-        const mixer = new THREE.AnimationMixer(mesh);
-
-        mesh.animations.forEach((clip) => {
-          const action = mixer.clipAction(clip);
-          action.loop = THREE.LoopOnce;
-          action.clampWhenFinished = true;
-          action.play();
-        });
-
-        // อัปเดต mixer ในทุกเฟรม
-        heartEl.sceneEl.addEventListener('tick', (e) => {
-          const delta = e.detail.delta / 1000;
-          mixer.update(delta);
-        });
-      });
 </script>
   </body>
 </html>
