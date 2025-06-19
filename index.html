@@ -2,85 +2,51 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>AR Halls Experience</title>
+    <title>AR Kuro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="scripts.js"></script>
 
     <style>
       body, html { margin: 0; overflow: hidden; width: 100%; height: 100%; }
     </style>
   </head>
   <body>
-    <a-scene world-map-controller mindar-image="imageTargetSrc: hall.mind" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true" embedded>
-
+    <a-scene world-map-controller mindar-image="imageTargetSrc: hall.mind; filterMinCF: 0; filterBeta: 0.0005"  color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <video id="hallVideo" src="cube.mp4" loop="true" autoplay="false" muted playsinline></video>
-        <a-asset-item id="halls-red" src="Penzilla.glb"></a-asset-item>
-        <a-asset-item id="pipe-drop" src="hotdog.glb"></a-asset-item>
+        <!-- เพิ่มโมเดลหรือทรัพยากรที่ต้องการ -->
+         <a-asset-item id="model" src="SmallHouse.glb"></a-asset-item>
+         <a-asset-item id="hotdog" src="hotdog.glb"></a-asset-item>
+         <a-asset-item id="penzilla" src="Penzilla.glb"></a-asset-item>
+         <a-asset-item id="heart" src="heart.glb"></a-asset-item>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-
-      <!-- Anchor -->
-      <a-entity id="anchor" mindar-image-target="targetIndex: 0">
-        <a-entity id="world-content" visible="false">
-        <!-- Center animation (between red and blue Halls) -->
-          <a-entity gltf-model="#halls-red"
-            position="0 0.5 0"
-            scale="0.3 0.3 0.3"
-            rotation="0 180 0"
+      <a-entity id="target" mindar-image-target="targetIndex: 0; smooth: true; smoothCount: 1; smoothTolerance: 0.001; smoothThreshold: 1;">
+        <!-- <a-box position="0 0 0" depth="0.5" height="0.5" width="0.5" color="#333333" rotation="0 45 0" animation="property: rotation; to: 0 405 0; loop: true; dur: 5000"></a-box> -->
+        <a-text value="Penzilla 🐾" align="center" position="0 -0.6 0" width="4" color="#FF0000"></a-text>
+        <a-entity gltf-model="#model" 
+            position="-0.5 0.2 0" 
+            scale="0.5 0.5 0.5" 
+            rotation="0 0 0" 
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 5000" 
             animation-mixer>
-          </a-entity>
-          <a-box id="center-effect" position="0 0 0" color="red" animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
-
-          <!-- Left video area -->
-          <a-video id="video-area" position="-1 0 0" width="1.2" height="0.7" src="#hallVideo" visible="false"></a-video>
-
-          <!-- Top drop effect -->
-          <a-entity gltf-model="#pipe-drop" id="pipe-effect" position="0 1 0" scale="0.3 0.3 0.3" animation="property: position; to: 0 -0.5 0; loop: true; dur: 3000" visible="false"></a-entity>
+        </a-entity>
+        <a-entity gltf-model="#heart" 
+            position="0 -0.3 0" 
+            scale="0.5 0.5 0.5" 
+            rotation="0 0 0" 
+            animation-mixer>
+        </a-entity>
+        <a-entity id="modelOnTarget" gltf-model="#penzilla" 
+            position="0.5 0.3 0" 
+            scale="0.5 0.5 0.5" 
+            rotation="0 0 0" 
+            animation-mixer="clip: Action">
         </a-entity>
       </a-entity>
-
-      <!-- Content group anchored to world (will be positioned relatively from anchor) -->
-      
-
-      <script>
-        AFRAME.registerComponent('world-map-controller', {
-          init: function () {
-            const sceneEl = this.el;
-            const anchor = document.querySelector('#anchor');
-            const worldContent = document.querySelector('#world-content');
-            const centerEffect = document.querySelector('#center-effect');
-            const videoArea = document.querySelector('#video-area');
-            const pipeEffect = document.querySelector('#pipe-effect');
-            const video = document.querySelector('#hallVideo');
-
-            anchor.addEventListener('targetFound', () => {
-              const anchorObj = anchor.object3D;
-              anchorObj.updateMatrixWorld(true);
-
-              const worldPos = new THREE.Vector3();
-              anchorObj.getWorldPosition(worldPos);
-
-              // Set position for world content relative to anchor
-              // worldContent.object3D.position.copy(worldPos);
-              worldContent.setAttribute('visible', true);
-
-              // Show video and effects
-              videoArea.setAttribute('visible', true);
-              pipeEffect.setAttribute('visible', true);
-              if (video.paused) video.play();
-            });
-
-            anchor.addEventListener('targetLost', () => {
-              // Optional: hide content or keep it
-              // worldContent.setAttribute('visible', false);
-            });
-          }
-        });
-      </script>
     </a-scene>
   </body>
 </html>
