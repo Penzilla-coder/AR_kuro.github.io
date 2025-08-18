@@ -22,8 +22,8 @@
          <a-asset-item id="penzilla" src="Penzilla.glb"></a-asset-item>
          <a-asset-item id="heart" src="heart.glb"></a-asset-item>
          <a-asset-item id="cadbury" src="BoyGirl_AR_02.glb"></a-asset-item>
-         <a-asset-item id="blue" src="./models/Blue.glb"></a-asset-item>
-         <a-asset-item id="red" src="./models/Pink.glb"></a-asset-item>
+         <a-asset-item id="bluemodel" src="./models/Blue.glb"></a-asset-item>
+         <a-asset-item id="redmodel" src="./models/Pink.glb"></a-asset-item>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -60,20 +60,20 @@
             animation-mixer>
         </a-entity> -->
         <a-entity
-            id="testblue"
-            gltf-model="#blue" 
+            id="red"
+            gltf-model="#bluemodel" 
             position="0 0 0" 
             scale="1 1 1" 
             rotation="0 0 0" 
-            animation-mixer>
+            animation-mixer="timeScale: 0; crossFadeDuration: 0">
         </a-entity>
         <a-entity
-            id="testred"
-            gltf-model="#red" 
+            id="blue"
+            gltf-model="#redmodel" 
             position="0 0 0" 
             scale="1 1 1" 
             rotation="0 0 0" 
-            animation-mixer>
+            animation-mixer="timeScale: 0; crossFadeDuration: 0">
         </a-entity>
       </a-entity>
     </a-scene>
